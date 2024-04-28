@@ -1,0 +1,90 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<h1>Get started with EasyApi</h1>
+<p class="lead">TBD</p>
+
+<h2>Sample</h2>
+<p>TBD</p>
+
+<h2>Quick start</h2>
+
+<h3>Contract</h3>
+
+<div class="alert alert-warning" role="alert">
+    Make sure to reference the <a href="https://www.nuget.org/packages/BlazorUtils.EasyApi" target=”_blank” class="alert-link">BlazorUtils.EasyApi</a> NuGet package in your Contract project!
+</div>
+
+<p>TBD <span class="badge bg-secondary">EasyApiWebsite > Contract</span></p>
+<pre class="border p-3"><code>[Route("api/posts")]
+public class AddPost : IPost
+{
+    [BodyParam]
+    public string Author { get; init; } = default!;
+
+    [BodyParam]
+    public string Content { get; init; } = default!;
+}
+</code></pre>
+
+<h3>Server</h3>
+
+<div class="alert alert-warning" role="alert">
+    Make sure to reference the <a href="https://www.nuget.org/packages/BlazorUtils.EasyApi.Server" target=”_blank” class="alert-link">BlazorUtils.EasyApi.Server</a> NuGet package in your Server project!
+</div>
+
+<p>TBD <span class="badge bg-secondary">EasyApiWebsite > Server > Program.cs</span></p>
+<pre class="border p-3"><code>builder.Services
+    .AddEasyApi()
+    .WithContract(typeof(Post).Assembly)
+    .WithServer();
+</code></pre>
+
+<p>TBD</p>
+<pre class="border p-3"><code>app.MapRequests();</code></pre>
+
+<p>TBD <span class="badge bg-secondary">EasyApiWebsite > Server > Handlers</span></p>
+<pre class="border p-3"><code>internal class AddPostHandler(PostsRepository PostsRepository) : IHandle&lt;AddPost&gt;
+{
+    public async Task&lt;HttpResult&gt; Handle(AddPost request, CancellationToken cancellationToken)
+    {
+        await PostsRepository.Add(request.Author, request.Content);
+        return HttpResult.Created();
+    }
+}
+</code></pre>
+
+<h3>Client</h3>
+
+<div class="alert alert-warning" role="alert">
+    Make sure to reference the <a href="https://www.nuget.org/packages/BlazorUtils.EasyApi.Client" target=”_blank” class="alert-link">BlazorUtils.EasyApi.Client</a> NuGet package in your Client project!
+</div>
+
+<p>TBD <span class="badge bg-secondary">EasyApiWebsite > Client > Program.cs</span></p>
+<pre class="border p-3"><code>builder.Services.AddTransient(provider => new HttpClient
+{
+    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+});
+</code></pre>
+
+<p>TBD</p>
+<pre class="border p-3"><code>builder.Services
+    .AddEasyApi()
+    .WithContract(typeof(Post).Assembly)
+    .WithClient();
+</code></pre>
+
+<p>TBD <span class="badge bg-secondary">EasyApiWebsite > Client > Components</span></p>
+<pre class="border p-3"><code>&#64;inject ICall&lt;AddPost&gt; AddPost
+
+private async Task HandleValidSubmit()
+{
+    var request = new AddPost()
+    {
+        Author = _newPost.Author!,
+        Content = _newPost.Content!
+    };
+    await AddPost.Call(request);
+}
+</code></pre>

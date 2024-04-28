@@ -1,0 +1,28 @@
+﻿@page "/posts"
+
+@inject ICall<GetPosts, IEnumerable<Post>> GetPosts
+
+<PageTitle>Posts</PageTitle>
+
+<PostInput PostAdded="PostAdded"/>
+
+@foreach (var post in _posts)
+{
+    <PostContent Post="post" PostDeleted="PostDeleted"/>
+}
+
+@code {
+    private IEnumerable<Post> _posts = [];
+
+    protected override async Task OnInitializedAsync() => await FetchPosts();
+
+    private async Task PostAdded() => await FetchPosts();
+
+    private async Task PostDeleted() => await FetchPosts();
+
+    private async Task FetchPosts()
+    {
+        var request = new GetPosts();
+        _posts = await GetPosts.Call(new());
+    }
+}

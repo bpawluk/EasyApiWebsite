@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using System.ComponentModel.DataAnnotations
+
+@inject ICall<AddPost> AddPost
+
+<EditForm Model="@_newPost" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="author">Author</label>
+        <InputText id="author" class="form-control mb-2" @bind-Value="_newPost.Author" />
+        <label for="content">Content</label>
+        <InputTextArea id="content" class="form-control mb-2" @bind-Value="_newPost.Content" />
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Post</button>
+</EditForm>
+
+@code {
+    private NewPost _newPost = new();
+
+    [Parameter]
+    public EventCallback PostAdded { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        var request = new AddPost()
+        {
+            Author = _newPost.Author!,
+            Content = _newPost.Content!
+        };
+        await AddPost.Call(request);
+
+        _newPost = new();
+
+        await PostAdded.InvokeAsync();
+    }
+
+    private class NewPost()
+    {
+        [Required]
+        public string? Author { get; set; }
+
+        [Required]
+        public string? Content { get; set; }
+    }
+}

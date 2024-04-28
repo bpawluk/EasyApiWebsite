@@ -1,0 +1,40 @@
+﻿@using EasyApiWebsite.Contract.Model
+
+@inject ICall<LikePost, Post> LikePost
+@inject ICall<DeletePost> DeletePost
+
+<div class="card mt-3">
+    <div class="card-body">
+        <div class="card-title row justify-content-between align-items-center g-0 mb-2">
+            <div class="col-auto">
+                <h5 class="card-title m-0">@Post.Author</h5>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-primary px-2 py-1" @onclick="LikePostClicked">Like <span class="badge bg-light text-dark ms-1">@Post.Likes</span></button>
+                <button type="button" class="btn btn-danger px-2 py-1" @onclick="DeletePostClicked">✖</button>
+            </div>
+        </div>
+        <p class="card-text">@Post.Content</p>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Post Post { get; set; } = new Post(Guid.Empty, string.Empty, string.Empty, 0);
+
+    [Parameter]
+    public EventCallback PostDeleted { get; set; }
+
+    private async Task LikePostClicked(MouseEventArgs e)
+    {
+        var request = new LikePost() { PostId = Post.Id };
+        Post = await LikePost.Call(request);
+    }
+
+    private async Task DeletePostClicked(MouseEventArgs e)
+    {
+        var request = new DeletePost() { PostId = Post.Id };
+        await DeletePost.Call(request);
+        await PostDeleted.InvokeAsync();
+    }
+}
