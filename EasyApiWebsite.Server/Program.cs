@@ -3,6 +3,7 @@ using BlazorUtils.EasyApi.Server;
 using EasyApiWebsite.Client;
 using EasyApiWebsite.Contract.Model;
 using EasyApiWebsite.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<PostsRepository>();

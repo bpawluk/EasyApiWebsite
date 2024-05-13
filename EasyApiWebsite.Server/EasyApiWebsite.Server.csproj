@@ -9,7 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EasyApiWebsite.Contract\EasyApiWebsite.Contract.csproj" />
     <ProjectReference Include="..\EasyApiWebsite.Client\EasyApiWebsite.Client.csproj" />
-    <PackageReference Include="BlazorUtils.EasyApi.Server" Version="0.2.0" />
+    <PackageReference Include="BlazorUtils.EasyApi.Server" Version="0.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.2" />
   </ItemGroup>
 
