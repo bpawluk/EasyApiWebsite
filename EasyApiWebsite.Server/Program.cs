@@ -10,6 +10,7 @@ builder.Services.AddSingleton<PostsRepository>();
 
 builder.Services
     .AddRazorComponents()
+    .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
 // Setup EasyApi server-side with the specified Contract 
@@ -29,6 +30,7 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
+   .AddInteractiveServerRenderMode()
    .AddInteractiveWebAssemblyRenderMode();
 
 // Create API endpoints for EasyApi requests 
