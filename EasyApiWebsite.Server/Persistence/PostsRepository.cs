@@ -43,13 +43,5 @@ public class PostsRepository
         return Task.FromResult(false);
     }
 
-    public Task<bool> Delete(Guid postId)
-    {
-        if (_posts.ContainsKey(postId))
-        {
-            _posts.Remove(postId);
-            return Task.FromResult(true);
-        }
-        return Task.FromResult(false);
-    }
+    public Task<bool> Delete(Guid postId) => Task.FromResult(_posts.Remove(postId));
 }

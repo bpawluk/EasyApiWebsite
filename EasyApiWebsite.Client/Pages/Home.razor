@@ -3,12 +3,13 @@
 <PageTitle>Home</PageTitle>
 
 <h1>Get started with EasyApi</h1>
-<p class="lead">TBD</p>
+<p class="lead">Develop Blazor applications faster than ever before</p>
 
 <h2>Sample</h2>
-<p>TBD</p>
+<p>See EasyApi in action with a simple demo application. Go to the Posts page using the navigation menu and play around.</p>
 
 <h2>Quick start</h2>
+<p>To get started with EasyApi, you will need to configure your Blazor application by setting up the Contract, Server and Client projects. The steps described below will guide you through this simple process.</p>
 
 <h3>Contract</h3>
 
@@ -16,7 +17,13 @@
     Make sure to reference the <a href="https://www.nuget.org/packages/BlazorUtils.EasyApi" target=”_blank” class="alert-link">BlazorUtils.EasyApi</a> NuGet package in your Contract project!
 </div>
 
-<p>TBD <span class="badge bg-secondary">EasyApiWebsite > Contract</span></p>
+<p>First, define the contract for your API. In your Contract project, create classes to represent the HTTP requests you will be using.</p>
+<ul>
+    <li>Label your classes using appropriate interfaces representing different HTTP methods: IHead, IGet, IPost, IPut, IPatch and IDelete.</li>
+    <li>Specify all the parameters included in your requests and use appropriate attributes to define how they are sent – via HTTP body, headers, route or query string.</li>
+    <li>Use the Route attribute to specify the routes of your endpoints.</li>
+</ul>
+
 <pre class="border p-3"><code>[Route("api/posts")]
 public class AddPost : IPost
 {
@@ -27,6 +34,7 @@ public class AddPost : IPost
     public string Content { get; init; } = default!;
 }
 </code></pre>
+<p>Go to <span class="badge bg-secondary">EasyApiWebsite > Contract</span> and see the Contract defined for the sample app.</p>
 
 <h3>Server</h3>
 
@@ -34,17 +42,25 @@ public class AddPost : IPost
     Make sure to reference the <a href="https://www.nuget.org/packages/BlazorUtils.EasyApi.Server" target=”_blank” class="alert-link">BlazorUtils.EasyApi.Server</a> NuGet package in your Server project!
 </div>
 
-<p>TBD <span class="badge bg-secondary">EasyApiWebsite > Server > Program.cs</span></p>
+<h4>Setup</h4>
+
+<p>Next, you need to configure EasyApi in the Program.cs file of your server application. This is done in two steps.</p>
+
+<p>The first step is to register EasyApi services.</p>
 <pre class="border p-3"><code>builder.Services
     .AddEasyApi()
     .WithContract(typeof(Post).Assembly)
     .WithServer();
 </code></pre>
 
-<p>TBD</p>
+<p>The second step is to call the MapRequests extension method, which sets up your API endpoints.</p>
 <pre class="border p-3"><code>app.MapRequests();</code></pre>
+<p>Go to <span class="badge bg-secondary">EasyApiWebsite > Server > Program.cs</span> and see the Server setup used in the sample app.</p>
 
-<p>TBD <span class="badge bg-secondary">EasyApiWebsite > Server > Handlers</span></p>
+<h4>Handlers</h4>
+
+<p>The server application must define logic to handle all the requests defined in your contract. Use the IHandle interface to implement your handlers.</p>
+
 <pre class="border p-3"><code>internal class AddPostHandler(PostsRepository PostsRepository) : IHandle&lt;AddPost&gt;
 {
     public async Task&lt;HttpResult&gt; Handle(AddPost request, CancellationToken cancellationToken)
@@ -54,6 +70,7 @@ public class AddPost : IPost
     }
 }
 </code></pre>
+<p>Go to  <span class="badge bg-secondary">EasyApiWebsite > Server > Handlers</span> and see the Handlers defined for the sample app.</p>
 
 <h3>Client</h3>
 
@@ -61,21 +78,31 @@ public class AddPost : IPost
     Make sure to reference the <a href="https://www.nuget.org/packages/BlazorUtils.EasyApi.Client" target=”_blank” class="alert-link">BlazorUtils.EasyApi.Client</a> NuGet package in your Client project!
 </div>
 
-<p>TBD <span class="badge bg-secondary">EasyApiWebsite > Client > Program.cs</span></p>
+<h4>Setup</h4>
+
+<p>Finally, you need to configure EasyApi in the Program.cs file of your client application.</p>
+
+<p>Begin by making sure that a HttpClient is available for use.</p>
+
 <pre class="border p-3"><code>builder.Services.AddTransient(provider => new HttpClient
 {
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 });
 </code></pre>
 
-<p>TBD</p>
+<p>Then simply register the EasyApi client services.</p>
+
 <pre class="border p-3"><code>builder.Services
     .AddEasyApi()
     .WithContract(typeof(Post).Assembly)
     .WithClient();
 </code></pre>
+<p>Go to <span class="badge bg-secondary">EasyApiWebsite > Client > Program.cs</span> and see the Client setup used in the sample app.</p>
 
-<p>TBD <span class="badge bg-secondary">EasyApiWebsite > Client > Components</span></p>
+<h4>Usage</h4>
+
+<p>To use the API in your Blazor application, simply inject the ICall&lt;RequestType&gt or ICall&lt;RequestType, ResponseType&gt interface and invoke one of its methods:</p>
+
 <pre class="border p-3"><code>&#64;inject ICall&lt;AddPost&gt; AddPost
 
 private async Task HandleValidSubmit()
@@ -88,3 +115,6 @@ private async Task HandleValidSubmit()
     await AddPost.Call(request);
 }
 </code></pre>
+<p>Go to <span class="badge bg-secondary">EasyApiWebsite > Client > Components</span> and see the EasyApi calls used in the sample app.</p>
+
+<br />

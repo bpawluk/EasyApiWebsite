@@ -3,7 +3,7 @@ using EasyApiWebsite.Contract.Model;
 
 namespace EasyApiWebsite.Contract;
 
-[Route("api/posts/{PostId}")]
+[Route($"api/posts/{nameof(PostId)}")]
 public class LikePost : IPatch<Post>
 {
     [RouteParam]
