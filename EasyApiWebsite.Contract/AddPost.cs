@@ -2,7 +2,7 @@
 
 namespace EasyApiWebsite.Contract;
 
-[Route("api/posts")]
+[ProtectedRoute("api/posts")]
 public class AddPost : IPost
 {
     [BodyParam]

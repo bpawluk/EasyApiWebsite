@@ -2,7 +2,7 @@
 
 namespace EasyApiWebsite.Contract;
 
-[Route($"api/posts/{nameof(PostId)}")]
+[ProtectedRoute("api/posts/{PostId}")]
 public class DeletePost : IDelete
 {
     [RouteParam]

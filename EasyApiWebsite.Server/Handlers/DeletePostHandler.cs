@@ -1,9 +1,9 @@
 ﻿using BlazorUtils.EasyApi;
 using BlazorUtils.EasyApi.Server;
 using EasyApiWebsite.Contract;
-using EasyApiWebsite.Persistence;
+using EasyApiWebsite.Server.Persistence;
 
-namespace EasyApiWebsite.Handlers;
+namespace EasyApiWebsite.Server.Handlers;
 
 internal class DeletePostHandler(PostsRepository PostsRepository) : IHandle<DeletePost>
 {

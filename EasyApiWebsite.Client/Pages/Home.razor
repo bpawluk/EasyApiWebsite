@@ -21,10 +21,10 @@
 <ul>
     <li>Label your classes using appropriate interfaces representing different HTTP methods: IHead, IGet, IPost, IPut, IPatch and IDelete.</li>
     <li>Specify all the parameters included in your requests and use appropriate attributes to define how they are sent – via HTTP body, headers, route or query string.</li>
-    <li>Use the Route attribute to specify the routes of your endpoints.</li>
+    <li>Use the Route or ProtectedRoute attribute to specify the routes of your endpoints.</li>
 </ul>
 
-<pre class="border p-3"><code>[Route("api/posts")]
+<pre class="border p-3"><code>[ProtectedRoute("api/posts")]
 public class AddPost : IPost
 {
     [BodyParam]
@@ -101,7 +101,7 @@ public class AddPost : IPost
 
 <h4>Usage</h4>
 
-<p>To use the API in your Blazor application, simply inject the ICall&lt;RequestType&gt or ICall&lt;RequestType, ResponseType&gt interface and invoke one of its methods:</p>
+<p>To use the API in your Blazor application, simply inject the ICall&lt;RequestType&gt or ICall&lt;RequestType, ResponseType&gt interface and invoke one of its methods.</p>
 
 <pre class="border p-3"><code>&#64;inject ICall&lt;AddPost&gt; AddPost
 

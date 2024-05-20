@@ -1,9 +1,16 @@
 using BlazorUtils.EasyApi;
 using BlazorUtils.EasyApi.Client;
+using EasyApiWebsite.Client.Auth;
 using EasyApiWebsite.Contract.Model;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+builder.Services
+    .AddAuthorizationCore()
+    .AddCascadingAuthenticationState()
+    .AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
 
 // Register basic HttpClient
 builder.Services.AddTransient(provider => new HttpClient

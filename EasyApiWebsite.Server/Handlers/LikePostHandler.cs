@@ -2,9 +2,9 @@
 using BlazorUtils.EasyApi.Server;
 using EasyApiWebsite.Contract;
 using EasyApiWebsite.Contract.Model;
-using EasyApiWebsite.Persistence;
+using EasyApiWebsite.Server.Persistence;
 
-namespace EasyApiWebsite.Handlers;
+namespace EasyApiWebsite.Server.Handlers;
 
 internal class LikePostHandler(PostsRepository PostsRepository) : IHandle<LikePost, Post>
 {

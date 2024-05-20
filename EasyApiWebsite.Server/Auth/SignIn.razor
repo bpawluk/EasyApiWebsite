@@ -1,0 +1,61 @@
+﻿@page "/auth/sign-in"
+
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Components.Forms
+@using System.ComponentModel.DataAnnotations
+@using System.Security.Claims
+
+@inject NavigationManager NavigationManager
+
+<div class="alert alert-info" role="alert">
+    Any credentials will work. This is not the most secure site...
+</div>
+
+<EditForm Model="@_userData" method="post" OnValidSubmit="HandleValidSubmit" FormName="sign-in-form">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="username">Username</label>
+        <InputText id="username" class="form-control mb-2" @bind-Value="_userData.Username" />
+        <label for="password">Password</label>
+        <InputText id="password" type="password" class="form-control mb-2" @bind-Value="_userData.Password" />
+    </div>
+    <button type="submit" class="btn btn-primary w-100 mb-3">Sign In</button>
+</EditForm>
+
+@code {
+    [CascadingParameter]
+    private HttpContext _httpContext { get; set; } = default!;
+
+    [SupplyParameterFromForm]
+    private UserData _userData { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (HttpMethods.IsGet(_httpContext.Request.Method))
+        {
+            // Clear the existing external cookie to ensure a clean login process
+            await _httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Name, _userData.Username!),
+        };
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        await _httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+        NavigationManager.NavigateTo("/posts");
+    }
+
+    private class UserData()
+    {
+        [Required]
+        public string? Username { get; set; }
+
+        [Required]
+        public string? Password { get; set; }
+    }
+}

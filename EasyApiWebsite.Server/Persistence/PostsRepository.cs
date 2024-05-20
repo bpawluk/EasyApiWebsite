@@ -1,6 +1,6 @@
 ﻿using EasyApiWebsite.Contract.Model;
 
-namespace EasyApiWebsite.Persistence;
+namespace EasyApiWebsite.Server.Persistence;
 
 public class PostsRepository
 {

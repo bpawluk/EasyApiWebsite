@@ -2,11 +2,24 @@ using BlazorUtils.EasyApi;
 using BlazorUtils.EasyApi.Server;
 using EasyApiWebsite.Client;
 using EasyApiWebsite.Contract.Model;
-using EasyApiWebsite.Persistence;
+using EasyApiWebsite.Server;
+using EasyApiWebsite.Server.Auth;
+using EasyApiWebsite.Server.Persistence;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<PostsRepository>();
+
+builder.Services
+    .AddCascadingAuthenticationState()
+    .AddScoped<AuthenticationStateProvider, PersistingAuthenticationStateProvider>();
+
+builder.Services
+    .AddAuthorization()
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie();
 
 builder.Services
     .AddRazorComponents()
@@ -26,10 +39,13 @@ if (app.Environment.IsDevelopment())
     app.UseWebAssemblyDebugging();
 }
 
-app.UseStaticFiles();
-app.UseAntiforgery();
+app.UseStaticFiles()
+   .UseAntiforgery()
+   .UseAuthentication()
+   .UseAuthorization();
 
 app.MapRazorComponents<App>()
+   .AddAdditionalAssemblies(typeof(Routes).Assembly)
    .AddInteractiveServerRenderMode()
    .AddInteractiveWebAssemblyRenderMode();
 

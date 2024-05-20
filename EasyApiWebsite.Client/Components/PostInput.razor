@@ -3,28 +3,43 @@
 
 @inject ICall<AddPost> AddPost
 
-<EditForm Model="@_newPost" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <div class="form-group">
-        <label for="author">Author</label>
-        <InputText id="author" class="form-control mb-2" @bind-Value="_newPost.Author" />
-        <label for="content">Content</label>
-        <InputTextArea id="content" class="form-control mb-2" @bind-Value="_newPost.Content" />
-    </div>
-    <button type="submit" class="btn btn-primary w-100 mb-3">Post</button>
-</EditForm>
+<AuthorizeView Context="authContext">
+    <Authorized>
+        <EditForm Model="@_newPost" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <InputTextArea id="content" class="form-control mb-2" @bind-Value="_newPost.Content" />
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mb-3">Post</button>
+        </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        <div class="alert alert-danger" role="alert">
+            You're not authorized! <a href="/auth/sign-in">Sign In</a> to add and remove posts.
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     private NewPost _newPost = new();
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? _authenticationState { get; set; }
 
     [Parameter]
     public EventCallback PostAdded { get; set; }
 
     private async Task HandleValidSubmit()
     {
+        if (_authenticationState is null)
+        {
+            throw new InvalidOperationException("Authentication state is required for posting");
+        }
+        var user = await _authenticationState!;
+
         var request = new AddPost()
         {
-            Author = _newPost.Author!,
+            Author = user.User.Identity?.Name ?? "Unknown",
             Content = _newPost.Content!
         };
         await AddPost.Call(request);
@@ -36,9 +51,6 @@
 
     private class NewPost()
     {
-        [Required]
-        public string? Author { get; set; }
-
         [Required]
         public string? Content { get; set; }
     }

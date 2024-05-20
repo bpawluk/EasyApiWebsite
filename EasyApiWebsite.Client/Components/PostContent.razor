@@ -11,7 +11,11 @@
             </div>
             <div class="col-auto">
                 <button type="button" class="btn btn-primary px-2 py-1" @onclick="LikePostClicked">Like <span class="badge bg-light text-dark ms-1">@Post.Likes</span></button>
-                <button type="button" class="btn btn-danger px-2 py-1" @onclick="DeletePostClicked">✖</button>
+                <AuthorizeView>
+                    <Authorized>
+                        <button type="button" class="btn btn-danger px-2 py-1" @onclick="DeletePostClicked">✖</button>
+                    </Authorized>
+                </AuthorizeView>
             </div>
         </div>
         <p class="card-text">@Post.Content</p>
