@@ -84,7 +84,7 @@ public class AddPost : IPost
 
 <p>Begin by making sure that a HttpClient is available for use.</p>
 
-<pre class="border p-3"><code>builder.Services.AddTransient(provider => new HttpClient
+<pre class="border p-3"><code>builder.Services.AddScoped(provider => new HttpClient
 {
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 });

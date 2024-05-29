@@ -13,7 +13,7 @@ builder.Services
     .AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
 
 // Register basic HttpClient
-builder.Services.AddTransient(provider => new HttpClient
+builder.Services.AddScoped(provider => new HttpClient
 {
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 });
