@@ -1,5 +1,6 @@
 using BlazorUtils.EasyApi;
 using BlazorUtils.EasyApi.Server;
+using BlazorUtils.EasyApi.Server.Setup;
 using EasyApiWebsite.Client;
 using EasyApiWebsite.Contract.Model;
 using EasyApiWebsite.Server;
@@ -30,7 +31,8 @@ builder.Services
 builder.Services
     .AddEasyApi()
     .WithContract(typeof(Post).Assembly)
-    .WithServer();
+    .WithServer()
+    .Using<PrerenderedResponsePersistence>();
 
 var app = builder.Build();
 

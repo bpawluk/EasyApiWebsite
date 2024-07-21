@@ -1,6 +1,6 @@
 ﻿@page "/posts"
 
-@inject ICall<GetPosts, IEnumerable<Post>> GetPosts
+@inject IPersistentCall<GetPosts, IEnumerable<Post>> GetPosts
 
 <PageTitle>Posts</PageTitle>
 
@@ -23,6 +23,6 @@
     private async Task FetchPosts()
     {
         var request = new GetPosts();
-        _posts = await GetPosts.Call(new());
+        _posts = await GetPosts.Call(nameof(Posts), request);
     }
 }

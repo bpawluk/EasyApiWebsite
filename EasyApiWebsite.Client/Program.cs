@@ -1,5 +1,6 @@
 using BlazorUtils.EasyApi;
 using BlazorUtils.EasyApi.Client;
+using BlazorUtils.EasyApi.Client.Setup;
 using EasyApiWebsite.Client.Auth;
 using EasyApiWebsite.Contract.Model;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -22,6 +23,7 @@ builder.Services.AddScoped(provider => new HttpClient
 builder.Services
     .AddEasyApi()
     .WithContract(typeof(Post).Assembly)
-    .WithClient();
+    .WithClient()
+    .Using<PrerenderedResponsePersistence>();
 
 await builder.Build().RunAsync();
