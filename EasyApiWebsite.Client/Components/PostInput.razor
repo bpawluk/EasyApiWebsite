@@ -23,23 +23,13 @@
 @code {
     private NewPost _newPost = new();
 
-    [CascadingParameter]
-    private Task<AuthenticationState>? _authenticationState { get; set; }
-
     [Parameter]
     public EventCallback PostAdded { get; set; }
 
     private async Task HandleValidSubmit()
     {
-        if (_authenticationState is null)
-        {
-            throw new InvalidOperationException("Authentication state is required for posting");
-        }
-        var user = await _authenticationState!;
-
         var request = new AddPost()
         {
-            Author = user.User.Identity?.Name ?? "Unknown",
             Content = _newPost.Content!
         };
         await AddPost.Call(request);
